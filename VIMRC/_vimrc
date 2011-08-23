@@ -1,0 +1,61 @@
+set nocompatible
+source $VIMRUNTIME/vimrc_example.vim
+"source $VIMRUNTIME/mswin.vim
+behave mswin
+
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+
+
+colors desert
+filetype plugin on
+set guioptions-=T
+set nobackup
+set noswapfile
+set filetype=php
+syntax enable
+syntax on
+set nu
+set fileencodings=ucs-bom,utf-8,cp936
+set fileencoding=cp936
+set fenc=cp936
+let b:closetag_html_style=1
+let b:unaryTagsStack=0
+source D:/Program Files/Vim/vimfiles/scripts/closetag.vim
+au Filetype html,xml,xsl,php source D:/Program Files/Vim/vimfiles/scripts/closetag.vim
+map nhtml :NewTemplateTab html<cr>
+map nphp :NewTemplateTab php<cr>
+au GUIEnter * simalt ~x
+map nt :NERDTree  
+map <F5> :call ParsePhpFile()<cr> 
+imap <F5> <esc>:call ParsePhpFile()<cr> 
+map php :set ft=php<cr>
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]  
+set laststatus=2
+map vt :VSTreeExplore
+map tl :Tlist
+let g:ConqueTerm_PyExe = 'D:/Python32/python.exe'
+let g:ConqueTerm_ColorMode = 'conceal'
+let g:ConqueTerm_CodePage = 0
